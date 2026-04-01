@@ -1,0 +1,41 @@
+services:
+  nginx:
+    image: nginx:stable-alpine
+    container_name: minibank_nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: minibank_php
+    volumes:
+      - ./src:/var/www/html
+      - ./php.ini:/usr/local/etc/php/php.ini
+    expose:
+      - "9000"
+    depends_on:
+      - db
+ 
+  db:
+    image: mariadb:10.6
+    container_name: minibank_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: minibank_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+volumes:
+  db_data:
+
