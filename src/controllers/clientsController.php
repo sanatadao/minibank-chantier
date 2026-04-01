@@ -1,82 +1,76 @@
 <?php
-
-include_once '../config/database.php';
-include_once '../models/clientsModel.php';
+require_once __DIR__ . "/../models/clientsModel.php";
 
 class ClientController {
-    private $conn;
-    private $client;
 
-    public function __construct()
-    {
-        $database = new Database();
-        $this->conn = $database->getConnection();
-        $this->client = new Client($this->conn);
+    private $db;
+
+    public function __construct($db) {
+        $this->db = $db;
     }
 
-    // Afficher la liste des clients
     public function index() {
-        $stmt = $this->client->read();
-        $clients = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        include '../views/clients/index.php';
+        $client = new Client($this->db);
+        $clients = $client->read();
+
+        include __DIR__ . "/../views/clients/index.php";
+
     }
 
-     // 2. Formulaire d'ajout
     public function create() {
-        include '../views/clients/add.php';
+        include __DIR__ . "/../views/clients/create.php";
+
     }
 
-    // 3. Traitement de l'ajout
     public function store() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header('Location: /index.php?action=clients_index');
+        $client = new Client($this->db);
+
+        $client->nom = $_POST["nom"];
+        $client->prenom = $_POST["prenom"];
+        $client->email = $_POST["email"];
+        $client->ville = $_POST["ville"] ?? null;
+
+        if ($client->create()) {
+            header("Location: index.php?action=clients");
             exit;
         }
-
-        $this->client->nom    = trim($_POST['nom']);
-        $this->client->prenom = trim($_POST['prenom']);
-        $this->client->email  = trim($_POST['email']);
-        $this->client->ville  = trim($_POST['ville']);
-
-        $this->client->create();
-
-        header('Location: /index.php?action=clients_index&message=Client+ajouté&type=success');
-        exit;
+        echo "Erreur lors de la création du client.";
     }
 
-    // 4. Formulaire de modification
     public function edit($id) {
-        $client = $this->client->read($id);
-        include '../views/clients/edit.php';
+        $client = new Client($this->db);
+        $data = $client->read($id);
+
+        include __DIR__ . "/../views/clients/edit.php";
+
     }
 
-    // 5. Traitement de la modification
     public function update($id) {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header('Location: /index.php?action=clients_index');
-            exit;
-        }
+        $client = new Client($this->db);
 
-        $this->client->id     = $id;
-        $this->client->nom    = trim($_POST['nom']);
-        $this->client->prenom = trim($_POST['prenom']);
-        $this->client->email  = trim($_POST['email']);
-        $this->client->ville  = trim($_POST['ville']);
+        $client->id = $id;
+        $client->nom = $_POST["nom"];
+        $client->prenom = $_POST["prenom"];
+        $client->email = $_POST["email"];
+        $client->ville = $_POST["ville"] ?? null;
 
-        $this->client->update();
-
-        header('Location: /index.php?action=clients_index&message=Client+modifié&type=success');
-        exit;
+        $client->update();
+        header("Location: index.php?action=clients");
     }
 
-    // 6. Suppression
+    public function confirmDelete($id) {
+        $client = new Client($this->db);
+        $data = $client->read($id);
+
+        include __DIR__ . "/../views/clients/delete.php";
+
+    }
+
     public function delete($id) {
-        $this->client->id = $id;
-        $this->client->delete();
+        $client = new Client($this->db);
+        $client->id = $id;
 
-        header('Location: /index.php?action=clients_index&message=Client+supprimé&type=success');
-        exit;
+        $client->delete();
+        header("Location: index.php?action=clients");
     }
-
-
 }

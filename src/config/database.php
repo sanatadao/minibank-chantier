@@ -1,5 +1,5 @@
 <!-- Connexion à la base de données -->
-<?php
+ <?php
 
 class Database {
     private $host = "db";              

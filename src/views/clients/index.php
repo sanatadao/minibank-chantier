@@ -1,84 +1,53 @@
-<?php ob_start();
-// php/clients/index.php
-// Rôle : Afficher la liste des clients
-//        (les données sont fournies par le controller)
-
-// $clients est fourni par ClientController->index()
-?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>MiniBank — Liste des Clients</title>
-    <link rel="stylesheet" href="../../front_end/style.css">
+    <title>Liste des clients</title>
 </head>
 <body>
+    <h1>Clients</h1>
 
-<nav>
-    <a href="../../front_end/index.html" class="nav-logo">Mini<span>Bank</span></a>
-    <ul class="nav-links">
-        <li><a href="/index.php?action=clients_index" class="active">Clients</a></li>
-        <li><a href="/index.php?action=comptes_index">Comptes</a></li>
-        <li><a href="/index.php?action=transactions_index">Transactions</a></li>
-    </ul>
-</nav>
+    <nav>
+        <a href="index.php?action=home">Accueil</a> |
+        <a href="index.php?action=comptes">Comptes</a>
+    </nav>
 
-<main>
+    <h2>Liste des clients</h2>
 
-    <div class="page-header">
-        <h1>Liste des <span>Clients</span></h1>
-        <a href="/index.php?action=clients_create" class="btn btn-primary">+ Ajouter un client</a>
-    </div>
+    <input type="text" id="search" placeholder="Rechercher un client..." />
 
-    <?php if (!empty($_GET['message'])): ?>
-        <div class="alert <?= htmlspecialchars($_GET['type'] ?? 'info') ?>">
-            <?= htmlspecialchars($_GET['message']) ?>
-        </div>
-    <?php endif; ?>
+    <p><a href="index.php?action=client_create">Ajouter un client</a></p>
 
-    <div class="card">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Nom</th>
-                    <th>Prénom</th>
-                    <th>Email</th>
-                    <th>Ville</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Email</th>
+            <th>Ville</th>
+            <th>Actions</th>
+        </tr>
 
-            <tbody>
-                <?php foreach ($clients as $client): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($client["nom"]) ?></td>
-                        <td><?= htmlspecialchars($client["prenom"]) ?></td>
-                        <td><?= htmlspecialchars($client["email"]) ?></td>
-                        <td><?= htmlspecialchars($client["ville"]) ?></td>
+        <?php foreach ($clients as $c): ?>
+        <tr class="client-row">
+            <td><?= htmlspecialchars($c["nom"]) ?></td>
+            <td><?= htmlspecialchars($c["prenom"]) ?></td>
+            <td><?= htmlspecialchars($c["email"]) ?></td>
+            <td><?= htmlspecialchars($c["ville"]) ?></td>
+            <td>
+                <a href="index.php?action=client_edit&id=<?= $c['id'] ?>">Modifier</a> |
+                <a href="index.php?action=client_delete_confirm&id=<?= $c['id'] ?>">Supprimer</a>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </table>
 
-                        <td>
-                            <a href="/index.php?action=clients_edit&id=<?= $client["id"] ?>" class="btn btn-small">
-                                Modifier
-                            </a>
-
-                            <a href="/index.php?action=clients_delete&id=<?= $client["id"] ?>"
-                               class="btn btn-danger btn-small"
-                               onclick="return confirm('Supprimer ce client ?');">
-                               Supprimer
-                            </a>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
-
-</main>
-
-<footer>MiniBank © 2026 — Projet scolaire</footer>
-
-<script src="../../front_end/app.js"></script>
+    <script>
+    document.getElementById("search").addEventListener("keyup", function() {
+        let filter = this.value.toLowerCase();
+        document.querySelectorAll(".client-row").forEach(row => {
+            row.style.display = row.textContent.toLowerCase().includes(filter) ? "" : "none";
+        });
+    });
+    </script>
 </body>
 </html>
-<?php $content=ob_get_clean(); ?>
-<?php include __DIR__ . "/../layout.php"; ?>

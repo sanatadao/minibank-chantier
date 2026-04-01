@@ -1,106 +1,57 @@
 <?php
-// =============================================
-// controllers/transactionsController.php
-// Rôle : Gérer toutes les actions liées aux transactions
-//        Suit exactement le même modèle que clientsController.php
-// =============================================
-
-include_once '../config/database.php';
-include_once '../models/transactionsModel.php';
-include_once '../models/comptesModel.php'; // Nécessaire pour lire le solde du compte
+require_once __DIR__ . "/../models/transactionsModel.php";
+require_once __DIR__ . "/../models/comptesModel.php";
 
 class TransactionController {
-    private $conn;
-    private $transaction;
 
-    public function __construct() {
-        $database = new Database();
-        $this->conn = $database->getConnection();
-        $this->transaction = new Transaction($this->conn);
+    private $db;
+
+    public function __construct($db) {
+        $this->db = $db;
     }
 
-    // 1. Afficher l'historique des transactions d'un compte
-    public function index() {
-        // On récupère l'id du compte depuis l'URL (?compte_id=X)
-        $compte_id = $_GET['compte_id'] ?? null;
+    public function index($compte_id) {
+        $transaction = new Transaction($this->db);
+        $transactions = $transaction->read($compte_id);
 
-        if (!$compte_id) {
-            header('Location: /index.php?action=comptes_index');
-            exit;
-        }
+        $compte = new Compte($this->db);
+        $dataCompte = $compte->read($compte_id);
 
-        // On récupère les infos du compte (solde, numéro, titulaire)
-        $compteModel = new Compte($this->conn);
-        $compte = $compteModel->read($compte_id);
-
-        if (!$compte) {
-            header('Location: /index.php?action=comptes_index&message=Compte+introuvable&type=error');
-            exit;
-        }
-
-        // On récupère toutes les transactions de ce compte
-        $transactions = $this->transaction->read($compte_id);
-
-        include '../views/transactions/index.php';
+        include __DIR__ . "/../views/transactions/index.php";
     }
 
-    // 2. Traitement d'une transaction (dépôt ou retrait)
-    //    Le type est déterminé par le champ "type" du formulaire
-    public function store() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header('Location: /index.php?action=comptes_index');
-            exit;
+    public function create($compte_id) {
+        include __DIR__ . "/../views/transactions/create.php";
+    }
+
+    public function store($compte_id) {
+        $compte = new Compte($this->db);
+        $compte->id = $compte_id;
+        $data = $compte->read($compte_id);
+
+        $type = $_POST["type"];
+        $montant = floatval($_POST["montant"]);
+
+        if ($type === "retrait" && $montant > $data["solde"]) {
+            echo "Solde insuffisant !";
+            return;
         }
 
-        $compte_id = trim($_POST['compte_id']);
-        $type      = trim($_POST['type']);
-        $montant   = floatval($_POST['montant']);
+        $transaction = new Transaction($this->db);
+        $transaction->type = $type;
+        $transaction->montant = $montant;
+        $transaction->compte_id = $compte_id;
 
-        // Vérifications de base
-        if ($compte_id === '' || $type === '' || $montant <= 0) {
-            header('Location: /index.php?action=transactions_index&compte_id=' . $compte_id . '&message=Données+invalides&type=error');
-            exit;
-        }
+        if ($transaction->create()) {
+            $nouveauSolde = $type === "depot"
+                ? $data["solde"] + $montant
+                : $data["solde"] - $montant;
 
-        // On récupère le solde actuel du compte
-        $compteModel = new Compte($this->conn);
-        $compte = $compteModel->read($compte_id);
+            $compte->updateSolde($nouveauSolde);
 
-        if (!$compte) {
-            header('Location: /index.php?action=comptes_index&message=Compte+introuvable&type=error');
-            exit;
-        }
-
-        $solde_actuel = floatval($compte['solde']);
-
-        // -----------------------------------------------
-        // RÈGLE MÉTIER : vérification du solde pour retrait
-        // Un retrait impossible ne doit PAS modifier la base
-        // -----------------------------------------------
-        if ($type === 'retrait' && $solde_actuel < $montant) {
-            header('Location: /index.php?action=transactions_index&compte_id=' . $compte_id . '&message=Solde+insuffisant+pour+effectuer+ce+retrait&type=error');
-            exit;
-        }
-
-        // Tout est OK — on enregistre la transaction
-        $this->transaction->type      = $type;
-        $this->transaction->montant   = $montant;
-        $this->transaction->compte_id = $compte_id;
-        $this->transaction->create();
-
-        // On calcule le nouveau solde
-        if ($type === 'depot') {
-            $nouveau_solde = $solde_actuel + $montant;
+            header("Location: index.php?action=transactions&id=$compte_id");
         } else {
-            $nouveau_solde = $solde_actuel - $montant;
+            echo "Erreur lors de l'opération.";
         }
-
-        // On met à jour le solde du compte
-        $compteModel->id = $compte_id;
-        $compteModel->updateSolde($nouveau_solde);
-
-        $msg = $type === 'depot' ? 'Dépôt+effectué+avec+succès' : 'Retrait+effectué+avec+succès';
-        header('Location: /index.php?action=transactions_index&compte_id=' . $compte_id . '&message=' . $msg . '&type=success');
-        exit;
     }
 }
