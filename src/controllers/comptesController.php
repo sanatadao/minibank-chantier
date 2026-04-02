@@ -14,6 +14,9 @@ class CompteController {
         $compte = new Compte($this->db);
         $comptes = $compte->read();
 
+        $client = new Client($this->db); 
+        $clients = $client->read();
+
         include __DIR__ . "/../views/comptes/index.php";
     }
 

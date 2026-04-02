@@ -1,0 +1,574 @@
+/* =============================================
+   MINIBANK — Feuille de style principale
+   Auteur : Membre 3 (Front-end)
+   ============================================= */
+
+/* --- Importation de polices Google Fonts --- */
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+
+/* --- Variables CSS (couleurs et styles réutilisables) --- */
+:root {
+  --bleu-fonce:   #0a1628;
+  --bleu-moyen:   #102a4c;
+  --bleu-accent:  #1a6ef5;
+  --bleu-clair:   #e8f0fe;
+  --vert:         #12b76a;
+  --rouge:        #f04438;
+  --orange:       #f79009;
+  --texte:        #1d2939;
+  --texte-clair:  #667085;
+  --bordure:      #d0d5dd;
+  --fond:         #f8fafc;
+  --blanc:        #ffffff;
+  --ombre:        0 4px 24px rgba(10, 22, 40, 0.10);
+  --rayon:        12px;
+  --rayon-sm:     8px;
+  --transition:   all 0.22s cubic-bezier(.4,0,.2,1);
+}
+
+/* --- Reset de base --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--fond);
+  color: var(--texte);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* =============================================
+   NAVIGATION
+   ============================================= */
+nav {
+  background: var(--bleu-fonce);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  box-shadow: 0 2px 16px rgba(10,22,40,0.18);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 1.35rem;
+  color: var(--blanc);
+  letter-spacing: -0.5px;
+  text-decoration: none;
+}
+
+.nav-logo span {
+  color: var(--bleu-accent);
+}
+
+.nav-links {
+  display: flex;
+  gap: 0.25rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: #a0aec0;
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 500;
+  padding: 0.45rem 1rem;
+  border-radius: var(--rayon-sm);
+  transition: var(--transition);
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--blanc);
+  background: rgba(26, 110, 245, 0.18);
+}
+
+.nav-links a.active {
+  color: var(--bleu-accent);
+}
+
+/* =============================================
+   CONTENU PRINCIPAL
+   ============================================= */
+main {
+  flex: 1;
+  padding: 2.5rem 2rem;
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* =============================================
+   EN-TÊTE DE PAGE
+   ============================================= */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.page-header h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--bleu-fonce);
+}
+
+.page-header h1 span {
+  color: var(--bleu-accent);
+}
+
+/* =============================================
+   CARTES / CARDS
+   ============================================= */
+.card {
+  background: var(--blanc);
+  border-radius: var(--rayon);
+  box-shadow: var(--ombre);
+  padding: 1.75rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #eaecf0;
+}
+
+/* =============================================
+   BOUTONS
+   ============================================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.25rem;
+  border-radius: var(--rayon-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.btn-primary {
+  background: var(--bleu-accent);
+  color: var(--blanc);
+}
+.btn-primary:hover {
+  background: #1459cc;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(26,110,245,0.3);
+}
+
+.btn-success {
+  background: var(--vert);
+  color: var(--blanc);
+}
+.btn-success:hover {
+  background: #0e9456;
+  transform: translateY(-1px);
+}
+
+.btn-danger {
+  background: var(--rouge);
+  color: var(--blanc);
+}
+.btn-danger:hover {
+  background: #c0392b;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: var(--blanc);
+  color: var(--texte);
+  border: 1px solid var(--bordure);
+}
+.btn-secondary:hover {
+  background: var(--fond);
+  transform: translateY(-1px);
+}
+
+.btn-sm {
+  padding: 0.35rem 0.85rem;
+  font-size: 0.82rem;
+}
+
+/* =============================================
+   TABLEAUX
+   ============================================= */
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: var(--rayon);
+  border: 1px solid #eaecf0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--blanc);
+  font-size: 0.9rem;
+}
+
+thead {
+  background: var(--bleu-fonce);
+  color: var(--blanc);
+}
+
+thead th {
+  padding: 0.85rem 1.2rem;
+  text-align: left;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+tbody tr {
+  border-bottom: 1px solid #f2f4f7;
+  transition: var(--transition);
+}
+
+tbody tr:last-child {
+  border-bottom: none;
+}
+
+tbody tr:hover {
+  background: var(--bleu-clair);
+}
+
+tbody td {
+  padding: 0.9rem 1.2rem;
+  vertical-align: middle;
+  color: var(--texte);
+}
+
+.actions-cell {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* =============================================
+   FORMULAIRES
+   ============================================= */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--texte);
+  margin-bottom: 0.4rem;
+}
+
+.form-group label .required {
+  color: var(--rouge);
+  margin-left: 2px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  border: 1.5px solid var(--bordure);
+  border-radius: var(--rayon-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.92rem;
+  color: var(--texte);
+  background: var(--blanc);
+  transition: var(--transition);
+  outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--bleu-accent);
+  box-shadow: 0 0 0 3px rgba(26,110,245,0.12);
+}
+
+/* Champ en erreur */
+.form-group input.error,
+.form-group select.error {
+  border-color: var(--rouge);
+  box-shadow: 0 0 0 3px rgba(240,68,56,0.12);
+}
+
+/* Message d'erreur sous un champ */
+.field-error {
+  color: var(--rouge);
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+  display: none; /* caché par défaut, JS l'affiche */
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  justify-content: flex-end;
+}
+
+/* =============================================
+   BARRE DE RECHERCHE
+   ============================================= */
+.search-bar {
+  position: relative;
+  max-width: 350px;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 0.6rem 1rem 0.6rem 2.5rem;
+  border: 1.5px solid var(--bordure);
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  transition: var(--transition);
+  background: var(--blanc);
+}
+
+.search-bar input:focus {
+  border-color: var(--bleu-accent);
+  box-shadow: 0 0 0 3px rgba(26,110,245,0.12);
+}
+
+.search-bar .search-icon {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--texte-clair);
+  font-size: 1rem;
+  pointer-events: none;
+}
+
+/* =============================================
+   BADGES / TAGS
+   ============================================= */
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.badge-vert   { background: #d1fae5; color: #065f46; }
+.badge-rouge  { background: #fee2e2; color: #991b1b; }
+.badge-bleu   { background: #dbeafe; color: #1e40af; }
+.badge-orange { background: #fef3c7; color: #92400e; }
+
+/* =============================================
+   MESSAGES FLASH (succès / erreur)
+   ============================================= */
+.alert {
+  padding: 0.85rem 1.25rem;
+  border-radius: var(--rayon-sm);
+  font-size: 0.9rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.alert-success {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+.alert-error {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+/* Message si tableau vide */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--texte-clair);
+}
+
+.empty-state p {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* =============================================
+   MODALE DE CONFIRMATION
+   ============================================= */
+.modal-overlay {
+  display: none; /* caché par défaut */
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 22, 40, 0.55);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.18s ease;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-box {
+  background: var(--blanc);
+  border-radius: var(--rayon);
+  padding: 2rem;
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(10,22,40,0.22);
+  animation: slideUp 0.2s ease;
+}
+
+.modal-box h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.2rem;
+  margin-bottom: 0.75rem;
+  color: var(--bleu-fonce);
+}
+
+.modal-box p {
+  color: var(--texte-clair);
+  font-size: 0.92rem;
+  margin-bottom: 1.5rem;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+@keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(16px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+/* =============================================
+   FOOTER
+   ============================================= */
+footer {
+  text-align: center;
+  padding: 1.25rem;
+  font-size: 0.82rem;
+  color: var(--texte-clair);
+  border-top: 1px solid #eaecf0;
+  background: var(--blanc);
+  margin-top: auto;
+}
+
+/* =============================================
+   PAGE D'ACCUEIL — Hero et cartes de navigation
+   ============================================= */
+
+/* Grande zone de bienvenue */
+.hero {
+  background: var(--bleu-fonce);
+  color: var(--blanc);
+  border-radius: var(--rayon);
+  padding: 3rem 2.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+}
+
+.hero h1 span {
+  color: var(--bleu-accent);
+}
+
+.hero p {
+  color: #a0aec0;
+  font-size: 1rem;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Grille des 3 cartes de navigation */
+.nav-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.nav-card {
+  background: var(--blanc);
+  border: 1px solid #eaecf0;
+  border-radius: var(--rayon);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  text-decoration: none;
+  color: var(--texte);
+  box-shadow: var(--ombre);
+  transition: var(--transition);
+  display: block;
+}
+
+.nav-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(10,22,40,0.15);
+  border-color: var(--bleu-accent);
+}
+
+.nav-card .icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.nav-card h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--bleu-fonce);
+}
+
+.nav-card p {
+  font-size: 0.88rem;
+  color: var(--texte-clair);
+  line-height: 1.5;
+}
+
+/* =============================================
+   RESPONSIVE (petits écrans)
+   ============================================= */
+@media (max-width: 700px) {
+  .form-row { grid-template-columns: 1fr; }
+  .page-header { flex-direction: column; align-items: flex-start; }
+  nav { padding: 0 1rem; }
+  main { padding: 1.5rem 1rem; }
+  .nav-links a { padding: 0.4rem 0.65rem; font-size: 0.82rem; }
+  .nav-cards { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 1.8rem; }
+}

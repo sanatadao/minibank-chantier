@@ -2,37 +2,91 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Modifier un client</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiniBank — Modifier un client</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <h1>Modifier un client</h1>
 
+    <!-- NAVIGATION -->
     <nav>
-        <a href="index.php?action=clients">Retour à la liste</a>
+        <a href="index.php?action=home" class="nav-logo">Mini<span>Bank</span></a>
+        <ul class="nav-links">
+            <li><a href="index.php?action=clients" class="nav-link active">Clients</a></li>
+            <li><a href="index.php?action=comptes" class="nav-link">Comptes</a></li>
+        </ul>
     </nav>
 
-    <form method="POST" action="index.php?action=client_update&id=<?= $data['id'] ?>">
-        <p>
-            <label>Nom :</label><br>
-            <input type="text" name="nom" value="<?= htmlspecialchars($data['nom']) ?>" required>
-        </p>
+    <!-- CONTENU -->
+    <main>
 
-        <p>
-            <label>Prénom :</label><br>
-            <input type="text" name="prenom" value="<?= htmlspecialchars($data['prenom']) ?>" required>
-        </p>
+        <div class="page-header">
+            <h1>Modifier un <span>Client</span></h1>
+            <a href="index.php?action=clients" class="btn btn-secondary">← Retour</a>
+        </div>
 
-        <p>
-            <label>Email :</label><br>
-            <input type="email" name="email" value="<?= htmlspecialchars($data['email']) ?>" required>
-        </p>
+        <div class="card" style="max-width: 600px;">
 
-        <p>
-            <label>Ville :</label><br>
-            <input type="text" name="ville" value="<?= htmlspecialchars($data['ville']) ?>">
-        </p>
+            <form method="POST"
+                  action="index.php?action=client_update&id=<?= $data['id'] ?>"
+                  data-validate="client">
 
-        <button type="submit">Mettre à jour</button>
-    </form>
+                <!-- Nom et Prénom côte à côte -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nom">Nom <span class="required">*</span></label>
+                        <input type="text" id="nom" name="nom"
+                               value="<?= htmlspecialchars($data['nom']) ?>">
+                        <span class="field-error"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="prenom">Prénom <span class="required">*</span></label>
+                        <input type="text" id="prenom" name="prenom"
+                               value="<?= htmlspecialchars($data['prenom']) ?>">
+                        <span class="field-error"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email <span class="required">*</span></label>
+                    <input type="email" id="email" name="email"
+                           value="<?= htmlspecialchars($data['email']) ?>">
+                    <span class="field-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="ville">Ville</label>
+                    <input type="text" id="ville" name="ville"
+                           value="<?= htmlspecialchars($data['ville'] ?? '') ?>">
+                </div>
+
+                <div class="form-actions">
+                    <a href="index.php?action=clients" class="btn btn-secondary">Annuler</a>
+                    <button type="submit" class="btn btn-primary">✓ Enregistrer les modifications</button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+    <footer>
+        <p>MiniBank &copy; 2026 — Projet scolaire</p>
+    </footer>
+
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal-box">
+            <h2>⚠ Confirmer la suppression</h2>
+            <p id="modal-message"></p>
+            <div class="modal-actions">
+                <button id="btn-cancel-delete" class="btn btn-secondary">Annuler</button>
+                <button id="btn-confirm-delete" class="btn btn-danger">Oui, supprimer</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/app.js"></script>
+
 </body>
 </html>

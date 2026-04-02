@@ -26,7 +26,10 @@ class Compte {
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         } else {
-            $query = "SELECT * FROM " . $this->table_name . " WHERE id = :id LIMIT 1";
+            $query = "SELECT comptes.*, clients.nom, clients.prenom
+              FROM " . $this->table_name . "
+              JOIN clients ON comptes.client_id = clients.id
+              WHERE comptes.id = :id LIMIT 1";
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(":id", $id);
             $stmt->execute();

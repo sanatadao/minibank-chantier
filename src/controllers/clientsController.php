@@ -32,7 +32,7 @@ class ClientController {
 
         if ($client->create()) {
             header("Location: index.php?action=clients");
-            exit;
+            exit();
         }
         echo "Erreur lors de la création du client.";
     }
